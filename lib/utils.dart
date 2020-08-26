@@ -35,13 +35,9 @@ String buildUrlString(String url, Map<String, String> parameters) {
       url += "?";
     }
 
-    // Concat every parameter to the string url.
-    parameters.forEach((key, value) {
-      url += "$key=$value&";
-    });
+    String queryString = Uri(queryParameters: parameters).query;
 
-    // Remove last '&' character.
-    url = url.substring(0, url.length - 1);
+    url += queryString;
   }
 
   return url;
