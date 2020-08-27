@@ -156,7 +156,6 @@ class HttpClientWithInterceptor extends BaseClient {
     dynamic body,
     Encoding encoding,
   }) async {
-    print('library: $url');
     if (url is String) {
       url = Uri.parse(addParametersToStringUrl(url, params));
     } else if (url is Uri) {

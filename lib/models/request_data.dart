@@ -26,24 +26,37 @@ class RequestData {
   String get url => addParametersToStringUrl(baseUrl, params);
 
   factory RequestData.fromHttpRequest(Request request) {
-    var params = Map<String, String>();
-    request.url.queryParameters.forEach((key, value) {
-      params[key] = value;
-    });
-    String baseUrl = request.url.origin + request.url.path;
-    return RequestData(
-      method: methodFromString(request.method),
-      encoding: request.encoding,
-      body: request.body,
-      baseUrl: baseUrl,
-      headers: request.headers ?? <String, String>{},
-      params: params ?? <String, String>{},
-    );
+    if (request.url.queryParameters?.containsKey('list-support') ?? false) {
+      String baseUrl =
+          request.url.origin + request.url.path + '?${request.url.query}';
+      return RequestData(
+        method: methodFromString(request.method),
+        encoding: request.encoding,
+        body: request.body,
+        baseUrl: baseUrl,
+        headers: request.headers ?? <String, String>{},
+        params: <String, String>{},
+      );
+    } else {
+      var params = Map<String, String>();
+      request.url.queryParameters.forEach((key, value) {
+        params[key] = value;
+      });
+      String baseUrl = request.url.origin + request.url.path;
+      return RequestData(
+        method: methodFromString(request.method),
+        encoding: request.encoding,
+        body: request.body,
+        baseUrl: baseUrl,
+        headers: request.headers ?? <String, String>{},
+        params: params ?? <String, String>{},
+      );
+    }
   }
 
   Request toHttpRequest() {
     var reqUrl = Uri.parse(addParametersToStringUrl(baseUrl, params));
-    
+
     Request request = new Request(methodToString(method), reqUrl);
 
     if (headers != null) request.headers.addAll(headers);
